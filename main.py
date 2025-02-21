@@ -20,7 +20,7 @@ async def backup_data():
             source_collection = client_main[db][coll]
             target_collection = client_backup[db][coll]
 
-            async for doc in source_collection.find():
+            async for doc in source_collection.find().batch_size(BATCH_SIZE):
                 doc_id = doc["_id"]
                 await target_collection.replace_one({"_id": doc_id}, doc, upsert=True)
 
